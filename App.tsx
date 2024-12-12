@@ -1,117 +1,72 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useState} from 'react';
+import {SafeAreaView, StyleSheet, View, Text, Button} from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+type MyComponentProps = {
+  value: string;
+};
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const MyComponent = ({value}: MyComponentProps) => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.myComponentContainer}>
+      <Text>{`${value}`}</Text>
     </View>
   );
-}
+};
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [componentValue, setComponentValue] = useState('1');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handlePress = () => {
+    setComponentValue(prev => (prev === '1' ? '2' : '1'));
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <SafeAreaView>
+      <View style={styles.content}>
+        <Text>Both components have the same margin</Text>
+
+        <View style={styles.container}>
+          <MyComponent value="test1" />
         </View>
-      </ScrollView>
+        <View style={styles.rowContainer}>
+          <MyComponent value={`test${componentValue}`} />
+        </View>
+      </View>
+
+      <View style={styles.content}>
+        <Text>Components have different margin set</Text>
+        <View style={styles.containerBigMargin}>
+          <MyComponent value="test1" />
+        </View>
+        <View style={styles.rowContainerBigMargin}>
+          <MyComponent value={`test${componentValue}`} />
+        </View>
+      </View>
+      <Button title="Toggle value of second component" onPress={handlePress} />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  content: {
+    padding: 15,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  rowContainer: {
+    margin: 8,
+    flexDirection: 'row',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  rowContainerBigMargin: {
+    margin: 9,
+    flexDirection: 'row',
   },
-  highlight: {
-    fontWeight: '700',
+  container: {
+    margin: 8,
+  },
+  containerBigMargin: {
+    margin: 16,
+  },
+  myComponentContainer: {
+    backgroundColor: 'gray',
   },
 });
 
